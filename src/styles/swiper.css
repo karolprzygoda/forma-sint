@@ -1,0 +1,31 @@
+.swiper__nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  width: 64px;
+  height: 64px;
+  border: 1px solid var(--secondary);
+  background-color: var(--thirdary);
+}
+
+.swiper__nav-button-prev {
+  left: 10px;
+}
+
+.swiper__nav-button-prev-svg {
+  transform: rotate(180deg);
+}
+
+.swiper__nav-button:disabled {
+  display: none;
+}
+
+.swiper__nav-button-next {
+  right: 10px;
+}

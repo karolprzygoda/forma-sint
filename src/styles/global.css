@@ -1,0 +1,62 @@
+:root {
+  --primary: #1d1d1d;
+  --secondary: #eaeae8;
+  --thirdary: #ffffff;
+
+  --label-primary: #d9d6b0;
+  --label-secondary: #d4b0d9;
+
+  --drawer-width: 290px;
+  --drawer-backdrop: rgba(29, 29, 29, 0.8);
+
+  --swiper-scrollbar-sides-offset: 1rem;
+  --swiper-scrollbar-size: 1px;
+  --swiper-scrollbar-border-radius: 0;
+  --swiper-scrollbar-drag-bg-color: var(--primary);
+  --swiper-scrollbar-bg-color: var(--secondary);
+}
+
+body {
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--primary);
+  background-color: var(--thirdary);
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--primary);
+  letter-spacing: -0.02em;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+@media (min-width: 640px) {
+}
+
+@media (min-width: 768px) {
+}
+
+@media (min-width: 1024px) {
+  h1 {
+    font-size: 2.625rem;
+  }
+  .text-lg {
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 1280px) {
+}
+
+@media (min-width: 2560px) {
+}

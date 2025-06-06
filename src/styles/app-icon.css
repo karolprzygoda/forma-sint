@@ -1,0 +1,16 @@
+.app-icon__bg {
+  color: var(--thirdary);
+  transition: color 0.3s ease-in-out;
+}
+
+.app-icon__letter {
+  transition: color 0.3s ease-in-out;
+}
+
+.app-icon__container:hover .app-icon__bg {
+  color: var(--primary);
+}
+
+.app-icon__container:hover .app-icon__letter {
+  color: var(--thirdary);
+}

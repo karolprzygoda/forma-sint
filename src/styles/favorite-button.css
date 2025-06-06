@@ -1,0 +1,23 @@
+.favorite-button {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 1rem;
+  cursor: pointer;
+}
+
+.favorite-button svg {
+  fill: transparent;
+  stroke: var(--primary);
+  stroke-width: 1.5;
+  transition: fill 0.3s ease;
+}
+
+.favorite-button:hover svg {
+  fill: var(--primary);
+}

@@ -1,0 +1,18 @@
+# robots.txt for Forma'sint
+User-agent: *
+Allow: /
+Allow: /src/
+Allow: /index.html
+Allow: /hero-image.jpg
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /private/
+Disallow: /temp/
+Disallow: /draft/
+
+# Sitemap location
+Sitemap: https://formasint.com/sitemap.xml
+
+# Crawl-delay for all bots
+Crawl-delay: 10 
