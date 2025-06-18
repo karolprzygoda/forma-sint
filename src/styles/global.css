@@ -1,13 +1,16 @@
 :root {
   --primary: #1d1d1d;
   --secondary: #eaeae8;
-  --thirdary: #ffffff;
+  --tertiary: #ffffff;
 
   --label-primary: #d9d6b0;
   --label-secondary: #d4b0d9;
 
   --drawer-width: 290px;
   --drawer-backdrop: rgba(29, 29, 29, 0.8);
+
+  --modal-backdrop: rgba(29, 29, 29, 0.8);
+  --modal-background-color: var(--secondary);
 
   --swiper-scrollbar-sides-offset: 1rem;
   --swiper-scrollbar-size: 1px;
@@ -21,7 +24,7 @@ body {
   font-size: 1rem;
   line-height: 1.4;
   color: var(--primary);
-  background-color: var(--thirdary);
+  background-color: var(--tertiary);
   letter-spacing: -0.01em;
 }
 
@@ -40,13 +43,16 @@ h1 {
   letter-spacing: 0;
 }
 
-@media (min-width: 640px) {
+/* sm 640px */
+@media (width >= 40rem) {
 }
 
-@media (min-width: 768px) {
+/* md 768px */
+@media (width >= 48rem) {
 }
 
-@media (min-width: 1024px) {
+/* lg 1024px */
+@media (width >= 64rem) {
   h1 {
     font-size: 2.625rem;
   }
@@ -55,8 +61,14 @@ h1 {
   }
 }
 
-@media (min-width: 1280px) {
+/* xl 1280px */
+@media (width >= 80rem) {
 }
 
-@media (min-width: 2560px) {
+/* 2xl 1536px */
+@media (width >= 96rem) {
+}
+
+/* 3xl 2560px */
+@media (width >= 160rem) {
 }

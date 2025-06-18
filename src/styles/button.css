@@ -1,5 +1,5 @@
 .button--default {
-  background-color: var(--thirdary);
+  background-color: var(--tertiary);
   color: var(--primary);
   display: flex;
   align-items: center;

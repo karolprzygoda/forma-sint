@@ -1,10 +1,19 @@
-import { fetchData } from "../actions/fetch-actons.js";
 import { getRandomInt, objectToStyles } from "../utils/utils.js";
+import { fetchService } from "../services/fetch-service.js";
 
-const featuredSwiperEl = document.getElementById("featured-products-carousel");
-const productCardTemplate = document.getElementById("product-card-template");
+const API_BASE_URL = "https://brandstestowy.smallhost.pl/api/random?pageNumber=1&pageSize=10";
 
-const featuredData = await fetchData(1, 10);
+const dataContainer = document.getElementById("featured-products-carousel");
+const cardTemplate = document.getElementById("product-card-template");
+const skeletonTemplate = document.getElementById("product-card-skeleton-template");
+
+dataContainer.append(
+  ...Array.from({ length: 10 }).map(() => skeletonTemplate.content.cloneNode(true)),
+);
+
+const featuredData = await fetchService.fetch(API_BASE_URL);
+
+dataContainer.querySelectorAll(".product-card").forEach((item) => item.remove()); // Clear skeletons after data is fetched
 
 const badgeOption = new Map();
 badgeOption.set(1, { label: "BESTSELLER", styles: { "background-color": "var(--label-primary)" } });
@@ -20,7 +29,7 @@ const featuredList = featuredData.data.map((item) => {
   const badge = badgeOption.get(number);
   const badgeStyles = objectToStyles(badge.styles);
 
-  const productCard = productCardTemplate.content.cloneNode(true);
+  const productCard = cardTemplate.content.cloneNode(true);
   const label = productCard.querySelector(".product-card__badge");
   const imgEl = productCard.querySelector("img");
   const titleEl = productCard.querySelector("h2.text-lg");
@@ -36,4 +45,6 @@ const featuredList = featuredData.data.map((item) => {
   return productCard;
 });
 
-featuredSwiperEl.append(...featuredList);
+dataContainer.append(...featuredList);
+
+dataContainer.addEventListener("click", (e) => {});

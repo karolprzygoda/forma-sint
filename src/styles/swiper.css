@@ -11,7 +11,7 @@
   width: 64px;
   height: 64px;
   border: 1px solid var(--secondary);
-  background-color: var(--thirdary);
+  background-color: var(--tertiary);
 }
 
 .swiper__nav-button-prev {

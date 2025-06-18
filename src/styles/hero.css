@@ -27,7 +27,7 @@
   height: auto;
 }
 
-@media (min-width: 1024px) {
+@media (width >= 64rem) {
   .hero__frame {
     height: 732px;
   }
@@ -37,7 +37,7 @@
   }
 }
 
-@media screen and (min-width: 1280px) {
+@media (width >= 80rem) {
   .hero {
     padding: 0 2.625rem;
   }

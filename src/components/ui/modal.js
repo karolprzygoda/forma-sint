@@ -7,22 +7,23 @@ modalTemplate.innerHTML = `
         }
         dialog {
           border: none;
+          border-radius: 0.375rem;
           background-color: var(--modal-background-color, white);
           padding: 0;
           transform: scale(0.8);
           opacity: 0;
           transition:
-              transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-              opacity 0.3s ease-out,
-              overlay 0.3s ease-out allow-discrete,
-              display 0.3s ease-out allow-discrete;
+              transform var(--modal-transition-duration, 0.3s) var(--modal-timing-fucntion, ease-out),
+              opacity var(--modal-transition-duration, 0.3s) var(--modal-timing-fucntion, ease-out),
+              overlay var(--modal-transition-duration, 0.3s) var(--modal-timing-fucntion, ease-out) allow-discrete,
+              display var(--modal-transition-duration, 0.3s) var(--modal-timing-fucntion, ease-out) allow-discrete;
         }
         dialog::backdrop {
           background-color: rgb(0 0 0 / 0%);
           transition:
-            display 0.3s allow-discrete,
-            overlay 0.3s allow-discrete,
-            background-color 0.3s;
+            display var(--modal-transition-duration, 0.3s) var(--modal-timing-fucntion, ease-out) allow-discrete,
+            overlay var(--modal-transition-duration, 0.3s) var(--modal-timing-fucntion, ease-out) allow-discrete,
+            background-color var(--modal-transition-duration, 0.3s) var(--modal-timing-fucntion, ease-out);
         }
         dialog[open]::backdrop {
           background-color: var(--modal-backdrop,rgb(0 0 0 / 50%));
@@ -36,14 +37,29 @@ modalTemplate.innerHTML = `
             background-color: rgb(0 0 0 / 0%);
           }
         }
+        .wrapper {
+          width: var(--modal-width, 100%);
+          height: var(--modal-height, 100%);
+          min-width: var(--modal-min-width, 320px);
+          min-height: var(--modal-min-height, 420px);
+          max-height: var(--modal-max-height, 620px);
+          max-width: var(--modal-max-width, 840px);
+          display: flex;
+        }
+        ::slotted(*){
+          flex: 1;
+        }
       </style>
-      <dialog >
-        <slot></slot>
+      <dialog>
+        <div class="wrapper">
+          <slot name="close-button"></slot>
+          <slot></slot>
+        </div>
       </dialog>
     `;
 
 class Modal extends HTMLElement {
-  modal;
+  #modal;
 
   constructor() {
     super();
@@ -51,7 +67,7 @@ class Modal extends HTMLElement {
   }
 
   #handleBackdropClick = (e) => {
-    const rect = this.modal.getBoundingClientRect();
+    const rect = this.#modal.getBoundingClientRect();
     const isInDialog =
       rect.top <= e.clientY &&
       e.clientY <= rect.bottom &&
@@ -62,10 +78,28 @@ class Modal extends HTMLElement {
     }
   };
 
+  #handleDisableScroll = () => {
+    document.body.style.overflow = "hidden";
+  };
+
+  #handleEnableScroll = () => {
+    document.body.style.overflow = "";
+  };
+
+  open = () => {
+    this.#handleDisableScroll();
+    this.#modal.showModal();
+  };
+
+  close = () => {
+    this.#modal.close();
+  };
+
   connectedCallback() {
     this.shadowRoot.appendChild(modalTemplate.content.cloneNode(true));
-    this.modal = this.shadowRoot.querySelector("dialog");
-    this.modal.addEventListener("click", this.#handleBackdropClick);
+    this.#modal = this.shadowRoot.querySelector("dialog");
+    this.#modal.addEventListener("click", this.#handleBackdropClick);
+    this.#modal.addEventListener("close", this.#handleEnableScroll);
 
     if (this.hasAttribute("open")) {
       this.open();
@@ -73,17 +107,8 @@ class Modal extends HTMLElement {
   }
 
   disconnectedCallback() {
-    this.modal.removeEventListener("click", this.#handleBackdropClick);
-  }
-
-  open() {
-    document.body.style.overflow = "hidden";
-    this.modal.showModal();
-  }
-
-  close() {
-    this.modal.close();
-    document.body.style.overflow = "";
+    this.#modal.removeEventListener("click", this.#handleBackdropClick);
+    this.#modal.removeEventListener("close", this.#handleEnableScroll);
   }
 }
 

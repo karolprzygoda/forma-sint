@@ -13,9 +13,10 @@ drawerTemplate.innerHTML = `
       padding: 0;
       inset-inline-start: unset;
       transition:
-          transform 0.3s ease-out,
-          overlay 0.3s ease-out allow-discrete,
-          display 0.3s ease-out allow-discrete;
+          transform var(--drawer-transition-duration, 0.3s) var(--drawer-timing-fucntion, ease-out),
+          opacity var(--drawer-transition-duration, 0.3s) var(--drawer-timing-fucntion, ease-out),
+          overlay var(--drawer-transition-duration, 0.3s) var(--drawer-timing-fucntion, ease-out) allow-discrete,
+          display var(--drawer-transition-duration, 0.3s) var(--drawer-timing-fucntion, ease-out) allow-discrete;
     }
     dialog[data-position="left"] {
       left: 0;
@@ -70,9 +71,11 @@ drawerTemplate.innerHTML = `
     dialog::backdrop {
       background-color: rgb(0 0 0 / 0%);
       transition:
-        display 0.3s allow-discrete,
-        overlay 0.3s allow-discrete,
-        background-color 0.3s;
+        transform var(--drawer-transition-duration, 0.3s) var(--drawer-timing-fucntion, ease-out),
+        opacity var(--drawer-transition-duration, 0.3s) var(--drawer-timing-fucntion, ease-out),
+        overlay var(--drawer-transition-duration, 0.3s) var(--drawer-timing-fucntion, ease-out) allow-discrete,
+        display var(--drawer-transition-duration, 0.3s) var(--drawer-timing-fucntion, ease-out) allow-discrete,
+        background-color var(--drawer-transition-duration, 0.3s);
     }
     dialog[open]::backdrop {
       background-color: var(--drawer-backdrop,rgb(0 0 0 / 50%));
@@ -108,6 +111,14 @@ class Drawer extends HTMLElement {
     }
   };
 
+  #handleDisableScroll = () => {
+    document.body.style.overflow = "hidden";
+  };
+
+  #handleEnableScroll = () => {
+    document.body.style.overflow = "";
+  };
+
   #handleAnchorClick = (e) => {
     const anchorTag = e.target;
 
@@ -124,12 +135,23 @@ class Drawer extends HTMLElement {
     targetElement.scrollIntoView({ behavior: "smooth" });
   };
 
+  open = () => {
+    this.#handleDisableScroll();
+    this.#drawer.showModal();
+  };
+
+  close = () => {
+    this.#drawer.close();
+    document.body.style.overflow = "";
+  };
+
   connectedCallback() {
     this.shadowRoot.appendChild(drawerTemplate.content.cloneNode(true));
     this.#drawer = this.shadowRoot.querySelector("dialog");
     this.#drawer.setAttribute("data-position", this.getAttribute("position") || "right");
     this.#drawer.addEventListener("click", this.#handleBackdropClick);
     this.#drawer.addEventListener("click", this.#handleAnchorClick);
+    this.#drawer.addEventListener("close", this.#handleEnableScroll);
 
     if (this.hasAttribute("open")) {
       this.open();
@@ -139,16 +161,7 @@ class Drawer extends HTMLElement {
   disconnectedCallback() {
     this.#drawer.removeEventListener("click", this.#handleBackdropClick);
     this.#drawer.removeEventListener("click", this.#handleAnchorClick);
-  }
-
-  open() {
-    document.body.style.overflow = "hidden";
-    this.#drawer.showModal();
-  }
-
-  close() {
-    this.#drawer.close();
-    document.body.style.overflow = "";
+    this.#drawer.removeEventListener("close", this.#handleEnableScroll);
   }
 }
 

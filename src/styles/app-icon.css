@@ -1,5 +1,5 @@
 .app-icon__bg {
-  color: var(--thirdary);
+  color: var(--tertiary);
   transition: color 0.3s ease-in-out;
 }
 
@@ -12,5 +12,5 @@
 }
 
 .app-icon__container:hover .app-icon__letter {
-  color: var(--thirdary);
+  color: var(--tertiary);
 }
