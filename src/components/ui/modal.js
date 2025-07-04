@@ -4,11 +4,12 @@ modalTemplate.innerHTML = `
         dialog[open] {
           transform: scale(1);
           opacity: 1;
+          /*adds padding right to prevent layout shift when scrollbar disappears so background color and border radius id assed to wrapper*/
+          scrollbar-gutter: stable; 
         }
         dialog {
           border: none;
-          border-radius: 0.375rem;
-          background-color: var(--modal-background-color, white);
+          background-color: transparent;
           padding: 0;
           transform: scale(0.8);
           opacity: 0;
@@ -38,6 +39,8 @@ modalTemplate.innerHTML = `
           }
         }
         .wrapper {
+          border-radius: 0.375rem;
+          background-color: var(--modal-background-color, white);
           width: var(--modal-width, 100%);
           height: var(--modal-height, 100%);
           min-width: var(--modal-min-width, 320px);
@@ -46,13 +49,9 @@ modalTemplate.innerHTML = `
           max-width: var(--modal-max-width, 840px);
           display: flex;
         }
-        ::slotted(*){
-          flex: 1;
-        }
       </style>
-      <dialog>
-        <div class="wrapper">
-          <slot name="close-button"></slot>
+      <dialog part="modal">
+        <div part="content-wrapper" class="wrapper">
           <slot></slot>
         </div>
       </dialog>
@@ -60,10 +59,40 @@ modalTemplate.innerHTML = `
 
 class Modal extends HTMLElement {
   #modal;
+  #abortController = new AbortController();
+  #isOpen = false;
+  #onOpen;
+  #onClose;
+
+  static observedAttributes = ["open"];
 
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+  }
+
+  get modal() {
+    return this.#modal;
+  }
+
+  get isOpen() {
+    return this.#isOpen;
+  }
+
+  set onOpen(callback) {
+    if (typeof callback === "function") {
+      this.#onOpen = callback;
+    } else {
+      console.warn("onOpen must be a function");
+    }
+  }
+
+  set onClose(callback) {
+    if (typeof callback === "function") {
+      this.#onClose = callback;
+    } else {
+      console.warn("onClose must be a function");
+    }
   }
 
   #handleBackdropClick = (e) => {
@@ -79,16 +108,46 @@ class Modal extends HTMLElement {
   };
 
   #handleDisableScroll = () => {
+    document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`;
     document.body.style.overflow = "hidden";
   };
 
   #handleEnableScroll = () => {
+    document.body.style.paddingRight = "";
     document.body.style.overflow = "";
   };
 
+  #setUpOnClickCallbacks = (e) => {
+    this.#handleBackdropClick(e);
+
+    const target = e.target.closest("[data-close-button]");
+
+    if (target) {
+      this.close();
+    }
+  };
+
+  #setUpOnCloseCallbacks = (e) => {
+    this.#onClose?.(e);
+    this.#handleEnableScroll();
+    this.removeAttribute("open");
+  };
+
+  #setUpEventListeners = () => {
+    const { signal } = this.#abortController;
+    this.#modal.addEventListener("click", this.#setUpOnClickCallbacks, { signal });
+    this.#modal.addEventListener("close", this.#setUpOnCloseCallbacks, { signal });
+  };
+
+  #removeEventListeners = () => {
+    this.#abortController.abort();
+  };
+
   open = () => {
+    this.#onOpen?.();
     this.#handleDisableScroll();
     this.#modal.showModal();
+    this.setAttribute("open", "");
   };
 
   close = () => {
@@ -98,17 +157,21 @@ class Modal extends HTMLElement {
   connectedCallback() {
     this.shadowRoot.appendChild(modalTemplate.content.cloneNode(true));
     this.#modal = this.shadowRoot.querySelector("dialog");
-    this.#modal.addEventListener("click", this.#handleBackdropClick);
-    this.#modal.addEventListener("close", this.#handleEnableScroll);
+    this.#setUpEventListeners();
 
-    if (this.hasAttribute("open")) {
+    if (this.isOpen) {
       this.open();
     }
   }
 
   disconnectedCallback() {
-    this.#modal.removeEventListener("click", this.#handleBackdropClick);
-    this.#modal.removeEventListener("close", this.#handleEnableScroll);
+    this.#removeEventListeners();
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === "open") {
+      this.#isOpen = newValue !== null;
+    }
   }
 }
 

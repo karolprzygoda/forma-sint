@@ -86,17 +86,47 @@ drawerTemplate.innerHTML = `
       }
     }
   </style>
-  <dialog>
+  <dialog part="drawer">
     <slot></slot>
   </dialog>
 `;
 
 class Drawer extends HTMLElement {
   #drawer;
+  #abortController = new AbortController();
+  #isOpen = false;
+  #onOpen;
+  #onClose;
+
+  static observedAttributes = ["open"];
 
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+  }
+
+  get drawer() {
+    return this.#drawer;
+  }
+
+  get isOpen() {
+    return this.#isOpen;
+  }
+
+  set onOpen(callback) {
+    if (typeof callback === "function") {
+      this.#onOpen = callback;
+    } else {
+      console.warn("onOpen must be a function");
+    }
+  }
+
+  set onClose(callback) {
+    if (typeof callback === "function") {
+      this.#onClose = callback;
+    } else {
+      console.warn("onClose must be a function");
+    }
   }
 
   #handleBackdropClick = (e) => {
@@ -112,10 +142,12 @@ class Drawer extends HTMLElement {
   };
 
   #handleDisableScroll = () => {
+    document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`;
     document.body.style.overflow = "hidden";
   };
 
   #handleEnableScroll = () => {
+    document.body.style.paddingRight = "";
     document.body.style.overflow = "";
   };
 
@@ -135,33 +167,65 @@ class Drawer extends HTMLElement {
     targetElement.scrollIntoView({ behavior: "smooth" });
   };
 
+  #setUpOnClickCallbacks = (e) => {
+    this.#handleBackdropClick(e);
+    this.#handleAnchorClick(e);
+
+    const target = e.target.closest("[data-close-button]");
+
+    if (target) {
+      this.close();
+    }
+  };
+
+  #setUpOnCloseCallbacks = (e) => {
+    this.#onClose?.(e);
+    this.#handleEnableScroll();
+    this.removeAttribute("open");
+  };
+
+  #setUpEventListeners = () => {
+    const { signal } = this.#abortController;
+    this.#drawer.addEventListener("click", this.#setUpOnClickCallbacks, { signal });
+    this.#drawer.addEventListener("close", this.#setUpOnCloseCallbacks, { signal });
+  };
+
+  #removeEventListeners = () => {
+    this.#abortController.abort();
+  };
+
   open = () => {
+    this.#onOpen?.();
     this.#handleDisableScroll();
     this.#drawer.showModal();
+    this.setAttribute("open", "");
   };
 
   close = () => {
     this.#drawer.close();
-    document.body.style.overflow = "";
   };
 
   connectedCallback() {
     this.shadowRoot.appendChild(drawerTemplate.content.cloneNode(true));
     this.#drawer = this.shadowRoot.querySelector("dialog");
-    this.#drawer.setAttribute("data-position", this.getAttribute("position") || "right");
-    this.#drawer.addEventListener("click", this.#handleBackdropClick);
-    this.#drawer.addEventListener("click", this.#handleAnchorClick);
-    this.#drawer.addEventListener("close", this.#handleEnableScroll);
 
-    if (this.hasAttribute("open")) {
+    this.#drawer.setAttribute("data-position", this.getAttribute("position") || "right");
+
+    this.#setUpEventListeners();
+
+    if (this.isOpen) {
       this.open();
     }
   }
 
   disconnectedCallback() {
-    this.#drawer.removeEventListener("click", this.#handleBackdropClick);
-    this.#drawer.removeEventListener("click", this.#handleAnchorClick);
-    this.#drawer.removeEventListener("close", this.#handleEnableScroll);
+    this.#removeEventListeners();
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === "open") {
+      this.#isOpen = newValue !== null;
+    }
   }
 }
 

@@ -12,6 +12,8 @@
     "vite": "^6.3.5"
   },
   "dependencies": {
-    "swiper": "^11.2.8"
+    "@fontsource/inter": "^5.2.6",
+    "swiper": "^11.2.8",
+    "vite-imagetools": "^7.1.0"
   }
 }

@@ -11,15 +11,8 @@
       name="keywords"
       content="outdoor clothing, alpine jackets, climbing gear, premium outdoor wear"
     />
-    <meta name="author" content="Forma'sint" />
+    <meta name="author" content="Karol Przygoda" />
     <meta name="robots" content="index, follow" />
-    <meta property="og:title" content="Forma'sint - Premium Outdoor Clothing" />
-    <meta
-      property="og:description"
-      content="Discover premium outdoor clothing and gear at Forma'sint. Browse our collection of alpine climbing jackets and more."
-    />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="/hero-image.jpg" />
     <link rel="icon" type="image/svg+xml" href="/forma-icon.svg" />
     <link rel="stylesheet" href="/src/styles/reset.css" />
     <link rel="stylesheet" href="/src/styles/global.css" />
@@ -34,12 +27,15 @@
     <link rel="stylesheet" href="/src/styles/app-icon.css" />
     <link rel="stylesheet" href="/src/styles/button.css" />
     <link rel="stylesheet" href="/src/styles/modal.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
     <script type="module" src="/src/main.js"></script>
     <title>Forma'sint - Premium Outdoor Clothing & Gear</title>
+    <!-- Prevent Best Practises Error-->
+    <style>
+      :where(h1) {
+        margin-block: 0.67em;
+        font-size: 2em;
+      }
+    </style>
   </head>
   <body>
     <!--ICONS SVG SPRITE-->
@@ -143,7 +139,7 @@
         </a>
         <span class="top-bar__label">IDOMODS &lt;/&gt;</span>
       </div>
-      <nav class="top-bar__item top-bar__navigation" role="navigation" aria-label="Main navigation">
+      <nav class="top-bar__item top-bar__navigation">
         <a href="#hero" class="top-bar__link">Home</a>
         <a href="#featured-products" class="top-bar__link">Featured products</a>
         <a href="#product-listing" class="top-bar__link">Product listing</a>
@@ -158,17 +154,12 @@
         </svg>
         <span>MENU</span>
       </button>
-      <div
-        class="top-bar__item top-bar__account-menu-trigger"
-        role="button"
-        tabindex="0"
-        aria-label="Account menu"
-      >
+      <button class="top-bar__item top-bar__account-menu-trigger" aria-label="Account menu">
         <svg width="24" height="24" aria-label="User account icon">
           <use href="#user"></use>
         </svg>
         <span>FRONTEND DEVELOPER</span>
-      </div>
+      </button>
     </header>
     <!--HERO SECTION-->
     <section id="hero" class="hero">
@@ -182,7 +173,12 @@
         <use href="#logo"></use>
       </svg>
       <div class="hero__frame">
-        <img src="/src/assets/hero-image.jpg" alt="Premium outdoor clothing showcase" />
+        <img
+          data-static-image="hero"
+          class="image-placeholder"
+          src="/src/assets/hero-image-placeholder.webp"
+          alt="Hero image placeholder"
+        />
       </div>
     </section>
     <!--FEATURED PRODUCTS SECTION-->
@@ -194,17 +190,10 @@
       <swiper-container
         id="featured-products-carousel"
         init="false"
-        navigation-prev-el=".swiper__nav-button-prev"
-        navigation-next-el=".swiper__nav-button-next"
         aria-label="Featured products carousel"
       >
         <div slot="container-end">
-          <button
-            class="swiper__nav-button swiper__nav-button-prev"
-            aria-label="Previous slide"
-            role="button"
-            aria-disabled="false"
-          >
+          <button class="swiper__nav-button swiper__nav-button-prev">
             <svg
               width="24"
               height="24"
@@ -214,22 +203,59 @@
               <use href="#arrow-right"></use>
             </svg>
           </button>
-          <button
-            class="swiper__nav-button swiper__nav-button-next"
-            aria-label="Next slide"
-            role="button"
-            aria-disabled="false"
-          >
+          <button class="swiper__nav-button swiper__nav-button-next">
             <svg width="24" height="24" aria-label="Next slide icon">
               <use href="#arrow-right"></use>
             </svg>
           </button>
         </div>
+        <swiper-slide class="product-card" data-product-skeleton>
+          <div class="product-card__header-skeleton"></div>
+          <div class="product-card__details">
+            <div class="product-card__content-skeleton"></div>
+            <div class="product-card__content-skeleton"></div>
+          </div>
+        </swiper-slide>
+        <swiper-slide class="product-card" data-product-skeleton>
+          <div class="product-card__header-skeleton"></div>
+          <div class="product-card__details">
+            <div class="product-card__content-skeleton"></div>
+            <div class="product-card__content-skeleton"></div>
+          </div>
+        </swiper-slide>
+        <swiper-slide class="product-card" data-product-skeleton>
+          <div class="product-card__header-skeleton"></div>
+          <div class="product-card__details">
+            <div class="product-card__content-skeleton"></div>
+            <div class="product-card__content-skeleton"></div>
+          </div>
+        </swiper-slide>
+        <swiper-slide class="product-card" data-product-skeleton>
+          <div class="product-card__header-skeleton"></div>
+          <div class="product-card__details">
+            <div class="product-card__content-skeleton"></div>
+            <div class="product-card__content-skeleton"></div>
+          </div>
+        </swiper-slide>
+        <swiper-slide class="product-card" data-product-skeleton>
+          <div class="product-card__header-skeleton"></div>
+          <div class="product-card__details">
+            <div class="product-card__content-skeleton"></div>
+            <div class="product-card__content-skeleton"></div>
+          </div>
+        </swiper-slide>
       </swiper-container>
     </section>
     <!--PRODUCT LISTING SECTION-->
     <section id="product-listing" class="product-listing">
-      <span class="product-listing__headline">Number of products per page</span>
+      <div class="product-listing__headline">
+        <span>Number of products per page</span>
+        <select-box id="product-listing-select-box">
+          <select-box-item value="14">14</select-box-item>
+          <select-box-item value="24">24</select-box-item>
+          <select-box-item value="36">36</select-box-item>
+        </select-box>
+      </div>
       <div id="product-listing-container" class="product-listing__container">
         <div class="product-listing__baner">
           <div class="product-listing__baner-content">
@@ -244,8 +270,27 @@
               </svg>
             </a>
           </div>
-          <img src="./src/assets/listing-image.jpg" alt="Banner img" />
+          <img
+            data-static-image="listing"
+            class="image-placeholder"
+            src="/src/assets/listing-image-placeholder.webp"
+            alt="Listing image placeholder"
+          />
         </div>
+        <div class="product-listing__card-skeleton" data-product-skeleton></div>
+        <div class="product-listing__card-skeleton" data-product-skeleton></div>
+        <div class="product-listing__card-skeleton" data-product-skeleton></div>
+        <div class="product-listing__card-skeleton" data-product-skeleton></div>
+        <div class="product-listing__card-skeleton" data-product-skeleton></div>
+        <div class="product-listing__card-skeleton" data-product-skeleton></div>
+        <div class="product-listing__card-skeleton" data-product-skeleton></div>
+        <div class="product-listing__card-skeleton" data-product-skeleton></div>
+        <div class="product-listing__card-skeleton" data-product-skeleton></div>
+        <div class="product-listing__card-skeleton" data-product-skeleton></div>
+        <div class="product-listing__card-skeleton" data-product-skeleton></div>
+        <div class="product-listing__card-skeleton" data-product-skeleton></div>
+        <div class="product-listing__card-skeleton" data-product-skeleton></div>
+        <div class="product-listing__card-skeleton" data-product-skeleton></div>
       </div>
     </section>
     <!--MOBILE NAVIGATION-->
@@ -254,7 +299,7 @@
         <svg width="24" height="24" aria-label="Forma'sint logo">
           <use href="#forma-icon"></use>
         </svg>
-        <button id="mobile-nav-close" class="drawer__close-button" aria-label="Close menu">
+        <button data-close-button class="drawer__close-button" aria-label="Close menu">
           <svg width="24" height="24">
             <use href="#close"></use>
           </svg>
@@ -275,6 +320,7 @@
             id="product-modal-close"
             class="modal__close-button"
             aria-label="Close product modal"
+            data-close-button
           >
             <svg width="24" height="24">
               <use href="#close"></use>
@@ -288,44 +334,44 @@
     </modal-panel>
     <!--PRODUCT CARD TEMPLATE-->
     <template id="product-card-template">
-      <swiper-slide class="product-card">
-        <div class="product-card__header">
-          <span class="product-card__badge"></span>
-          <button class="favorite-button" aria-label="Add to favorites">
-            <svg width="24" height="24">
-              <use href="#favorite"></use>
-            </svg>
-          </button>
-          <img src="" alt="" />
-        </div>
-        <div class="product-card__details">
-          <h2 class="text-lg"></h2>
-          <span>€300,00 EUR</span>
-        </div>
-      </swiper-slide>
-    </template>
-    <!--PRODUCT CARD SKELETON TEMPLATE-->
-    <template id="product-card-skeleton-template">
-      <swiper-slide class="product-card">
-        <ui-skeleton inject-styles="aspect-ratio: 1/1"></ui-skeleton>
-        <div class="product-card__details">
-          <ui-skeleton inject-styles="height:20px"></ui-skeleton>
-          <ui-skeleton inject-styles="height:20px"></ui-skeleton>
-        </div>
+      <swiper-slide style="position: relative">
+        <a href="" class="product-card" data-product>
+          <div class="product-card__header">
+            <span class="product-card__badge"></span>
+            <img src="" alt="" />
+          </div>
+          <div class="product-card__details">
+            <h2 class="text-lg"></h2>
+            <span>€300,00 EUR</span>
+          </div>
+        </a>
+        <button class="favorite-button" aria-label="Add to favorites">
+          <svg width="24" height="24">
+            <use href="#favorite"></use>
+          </svg>
+        </button>
       </swiper-slide>
     </template>
     <!--PRODUCT LISTING ITEM TEMPLATE-->
     <template id="product-listing-item-template">
-      <div class="product-listing__card">
+      <a href="" class="product-listing__card" data-product aria-label="Product link">
         <span class="product-listing__badge"></span>
         <img src="" alt="" />
-      </div>
+      </a>
+    </template>
+    <!--PRODUCT CARD SKELETON TEMPLATE-->
+    <template id="product-card-skeleton-template">
+      <swiper-slide class="product-card" data-product-skeleton>
+        <div class="product-card__header-skeleton"></div>
+        <div class="product-card__details">
+          <div class="product-card__content-skeleton"></div>
+          <div class="product-card__content-skeleton"></div>
+        </div>
+      </swiper-slide>
     </template>
     <!--PRODUCT LISTING ITEM SKELETON TEMPLATE-->
     <template id="product-listing-skeleton-template">
-      <swiper-slide class="product-listing__card" style="padding: 0">
-        <ui-skeleton inject-styles="aspect-ratio: 1/1"></ui-skeleton>
-      </swiper-slide>
+      <div class="product-listing__card-skeleton" data-product-skeleton></div>
     </template>
   </body>
 </html>

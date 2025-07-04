@@ -5,7 +5,11 @@ register();
 const swiperEl = document.querySelector("swiper-container");
 Object.assign(swiperEl, {
   slidesPerView: "auto",
-  navigation: true,
+  a11y: true,
+  navigation: {
+    nextEl: ".swiper__nav-button-next",
+    prevEl: ".swiper__nav-button-prev",
+  },
   spaceBetween: 16,
   slidesOffsetBefore: 16,
   slidesOffsetAfter: 16,
@@ -29,6 +33,10 @@ Object.assign(swiperEl, {
       padding-bottom: 2rem;
     }
     
+    :host ::slotted(swiper-slide) {
+      width: auto;
+    }
+    
     @media screen and (min-width: 1280px) {
       :host .swiper-wrapper {
         padding-bottom: 4rem;
@@ -36,5 +44,13 @@ Object.assign(swiperEl, {
     }
   `,
   ],
+  on: {
+    afterInit: () => {
+      const buttons = swiperEl.querySelectorAll(".swiper__nav-button");
+      buttons.forEach((button) => {
+        button.removeAttribute("aria-controls");
+      });
+    },
+  },
 });
 swiperEl.initialize();

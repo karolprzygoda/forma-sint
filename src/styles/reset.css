@@ -23,8 +23,8 @@ html {
   -moz-tab-size: 4;
   tab-size: 4;
   /* Use the user's configured `sans` font-family by default */
-  font-family: Inter, system-ui, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: Inter, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
   /* Use the user's configured `serif` font-feature-settings by default */
   font-feature-settings: normal;
   /* Use the user's configured `sans` font-variation-settings by default */
@@ -82,8 +82,8 @@ code,
 kbd,
 samp,
 pre {
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas,
-    "Liberation Mono", Menlo, monospace;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo,
+    monospace;
   font-size: 1em;
 }
 

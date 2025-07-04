@@ -17,6 +17,14 @@ class FetchService {
     return FetchService.#instance;
   }
 
+  get cache() {
+    return this.#cache;
+  }
+
+  clearCache() {
+    this.#cache = new Map();
+  }
+
   async fetch(url, options = {}) {
     try {
       const key = url + JSON.stringify(options);
@@ -26,26 +34,21 @@ class FetchService {
         return cached;
       }
 
-      //create artificial delay for demonstration purposes
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
       const response = await fetch(url, options);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      this.#cache.set(key, response);
+      const data = await response.json();
 
-      return await response.json();
+      this.#cache.set(key, data);
+
+      return data;
     } catch (error) {
       console.error("Fetch error:", error);
       throw error;
     }
-  }
-
-  clearCache() {
-    this.#cache = new Map();
   }
 }
 

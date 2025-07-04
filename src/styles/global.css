@@ -1,3 +1,8 @@
+@import "@fontsource/inter/latin-400.css";
+@import "@fontsource/inter/latin-500.css";
+@import "@fontsource/inter/latin-600.css";
+@import "@fontsource/inter/latin-700.css";
+
 :root {
   --primary: #1d1d1d;
   --secondary: #eaeae8;
@@ -36,11 +41,58 @@ h1 {
   letter-spacing: -0.02em;
 }
 
+select-box::part(trigger) {
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.4;
+  width: 75px;
+  color: var(--primary);
+  background-color: var(--tertiary);
+  letter-spacing: -0.01em;
+  font-family: Inter, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+select-box-item:not(:defined),
+drawer-panel:not(:defined),
+modal-panel:not(:defined) {
+  display: none;
+}
+
+select-box:not(:defined) {
+  padding: 0.75rem;
+  width: 75px;
+  height: 50px;
+}
+
+.image-placeholder {
+  filter: blur(20px);
+}
+
 .text-lg {
   font-size: 1.125rem;
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: 0;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
 }
 
 /* sm 640px */

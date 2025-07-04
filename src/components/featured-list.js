@@ -1,50 +1,57 @@
 import { getRandomInt, objectToStyles } from "../utils/utils.js";
-import { fetchService } from "../services/fetch-service.js";
+import { productsService } from "../services/products-service.js";
 
-const API_BASE_URL = "https://brandstestowy.smallhost.pl/api/random?pageNumber=1&pageSize=10";
+const INITIAL_PAGE_NUMBER = 1;
+const BADGE_OPTIONS = {
+  1: {
+    label: "BESTSELLER",
+    styles: { "background-color": "var(--label-primary)" },
+  },
+  2: {
+    label: "LIMITED EDITION",
+    styles: { "background-color": "var(--label-secondary)" },
+  },
+  3: {
+    label: "",
+    styles: { display: "none" },
+  },
+};
 
 const dataContainer = document.getElementById("featured-products-carousel");
 const cardTemplate = document.getElementById("product-card-template");
-const skeletonTemplate = document.getElementById("product-card-skeleton-template");
 
-dataContainer.append(
-  ...Array.from({ length: 10 }).map(() => skeletonTemplate.content.cloneNode(true)),
-);
-
-const featuredData = await fetchService.fetch(API_BASE_URL);
-
-dataContainer.querySelectorAll(".product-card").forEach((item) => item.remove()); // Clear skeletons after data is fetched
-
-const badgeOption = new Map();
-badgeOption.set(1, { label: "BESTSELLER", styles: { "background-color": "var(--label-primary)" } });
-badgeOption.set(2, {
-  label: "LIMITED EDITION",
-  styles: { "background-color": "var(--label-secondary)" },
-});
-badgeOption.set(3, { label: "", styles: { display: "none" } });
-
-const featuredList = featuredData.data.map((item) => {
+const renderProduct = (productData) => {
   const number = getRandomInt(1, 4);
-
-  const badge = badgeOption.get(number);
+  const badge = BADGE_OPTIONS[number];
   const badgeStyles = objectToStyles(badge.styles);
 
-  const productCard = cardTemplate.content.cloneNode(true);
-  const label = productCard.querySelector(".product-card__badge");
-  const imgEl = productCard.querySelector("img");
-  const titleEl = productCard.querySelector("h2.text-lg");
+  const productCardFragment = cardTemplate.content.cloneNode(true);
+  const productCard = productCardFragment.querySelector(".product-card");
+
+  const label = productCardFragment.querySelector(".product-card__badge");
+  const imgEl = productCardFragment.querySelector("img");
+  const titleEl = productCardFragment.querySelector("h2.text-lg");
+
+  productCard.id = `product-card-${productData.id}`;
+  productCard.href = `?product-id=${productData.id}`;
 
   label.textContent = badge.label;
   label.style = badgeStyles;
 
-  imgEl.src = item.image;
-  imgEl.alt = "Product Image:" + item.id;
+  imgEl.src = productData.image;
+  imgEl.alt = "Product Image:" + productData.id;
+  imgEl.loading = "lazy";
 
-  titleEl.textContent = item.text;
+  titleEl.textContent = productData.text;
 
-  return productCard;
-});
+  return productCardFragment;
+};
 
-dataContainer.append(...featuredList);
+export default async function initializeFeaturedList() {
+  const data = await productsService.fetchProducts(INITIAL_PAGE_NUMBER, dataContainer);
+  productsService.removeSkeletons(dataContainer);
 
-dataContainer.addEventListener("click", (e) => {});
+  const productCardList = data.map((product) => renderProduct(product));
+
+  dataContainer.append(...productCardList);
+}

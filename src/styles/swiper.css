@@ -29,3 +29,30 @@
 .swiper__nav-button-next {
   right: 10px;
 }
+
+swiper-container:not(:defined) .swiper__nav-button {
+  display: none;
+}
+
+swiper-container:not(:defined) {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  overflow: hidden;
+  padding: 0 16px 2rem 16px;
+}
+
+swiper-slide:not(:defined) {
+  min-width: 300px;
+  margin-right: 16px;
+  flex: 0 0 calc((100% - 3 * 16px) / 4);
+}
+
+@media (width >= 64rem) {
+  swiper-container:not(:defined) {
+    padding: 0 0 4rem 0;
+  }
+  swiper-slide:not(:defined) {
+    min-width: auto;
+  }
+}
