@@ -92,7 +92,3 @@ if (paramsService.hasParam("product-id")) {
     paramsService.deleteParam("product-id");
   }
 }
-
-const toast = document.querySelector("toast-popover");
-
-toast.show("info", "Welcome to our store!", "Explore our latest collections.", 5000, "top-right");
