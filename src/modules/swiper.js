@@ -18,13 +18,23 @@ Object.assign(swiperEl, {
     draggable: true,
   },
   breakpoints: {
-    1024: {
-      slidesPerView: 4,
+    1280: {
       slidesOffsetBefore: 0,
       slidesOffsetAfter: 0,
+      slidesPerView: 4,
+      spaceBetween: 16,
+    },
+    1536: {
+      slidesOffsetBefore: 0,
+      slidesOffsetAfter: 0,
+      slidesPerView: 4,
+      spaceBetween: 24,
     },
     2560: {
       slidesPerView: 5,
+      slidesOffsetBefore: 0,
+      slidesOffsetAfter: 0,
+      spaceBetween: 24,
     },
   },
   injectStyles: [
@@ -37,7 +47,7 @@ Object.assign(swiperEl, {
       width: auto;
     }
     
-    @media screen and (min-width: 1280px) {
+    @media screen and (min-width: 1536px) {
       :host .swiper-wrapper {
         padding-bottom: 4rem;
       }

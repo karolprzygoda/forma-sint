@@ -1,61 +1,63 @@
 const modalTemplate = document.createElement("template");
 modalTemplate.innerHTML = `
-      <style>
+    <style>
+      dialog[open] {
+        transform: scale(1);
+        opacity: 1;
+        /*adds padding right to prevent layout shift when scrollbar disappears so background color and border radius id assed to wrapper*/
+        scrollbar-gutter: stable; 
+      }
+      
+      dialog {
+        border: none;
+        background-color: transparent;
+        padding: 0;
+        transform: scale(0.8);
+        opacity: 0;
+        transition:
+            transform var(--modal-transition-duration, 0.3s) var(--modal-timing-fucntion, ease-out),
+            opacity var(--modal-transition-duration, 0.3s) var(--modal-timing-fucntion, ease-out),
+            overlay var(--modal-transition-duration, 0.3s) var(--modal-timing-fucntion, ease-out) allow-discrete,
+            display var(--modal-transition-duration, 0.3s) var(--modal-timing-fucntion, ease-out) allow-discrete;
+      }
+      
+      dialog::backdrop {
+        background-color: rgb(0 0 0 / 0%);
+        transition: all var(--modal-transition-duration, 0.3s) var(--modal-timing-fucntion, ease-out) allow-discrete;
+      }
+      
+      dialog[open]::backdrop {
+        background-color: var(--modal-backdrop,rgb(0 0 0 / 50%));
+      }
+      
+      @starting-style {
         dialog[open] {
-          transform: scale(1);
-          opacity: 1;
-          /*adds padding right to prevent layout shift when scrollbar disappears so background color and border radius id assed to wrapper*/
-          scrollbar-gutter: stable; 
-        }
-        dialog {
-          border: none;
-          background-color: transparent;
-          padding: 0;
           transform: scale(0.8);
           opacity: 0;
-          transition:
-              transform var(--modal-transition-duration, 0.3s) var(--modal-timing-fucntion, ease-out),
-              opacity var(--modal-transition-duration, 0.3s) var(--modal-timing-fucntion, ease-out),
-              overlay var(--modal-transition-duration, 0.3s) var(--modal-timing-fucntion, ease-out) allow-discrete,
-              display var(--modal-transition-duration, 0.3s) var(--modal-timing-fucntion, ease-out) allow-discrete;
-        }
-        dialog::backdrop {
-          background-color: rgb(0 0 0 / 0%);
-          transition:
-            display var(--modal-transition-duration, 0.3s) var(--modal-timing-fucntion, ease-out) allow-discrete,
-            overlay var(--modal-transition-duration, 0.3s) var(--modal-timing-fucntion, ease-out) allow-discrete,
-            background-color var(--modal-transition-duration, 0.3s) var(--modal-timing-fucntion, ease-out);
         }
         dialog[open]::backdrop {
-          background-color: var(--modal-backdrop,rgb(0 0 0 / 50%));
+          background-color: rgb(0 0 0 / 0%);
         }
-        @starting-style {
-          dialog[open] {
-            transform: scale(0.8);
-            opacity: 0;
-          }
-          dialog[open]::backdrop {
-            background-color: rgb(0 0 0 / 0%);
-          }
-        }
-        .wrapper {
-          border-radius: 0.375rem;
-          background-color: var(--modal-background-color, white);
-          width: var(--modal-width, 100%);
-          height: var(--modal-height, 100%);
-          min-width: var(--modal-min-width, 320px);
-          min-height: var(--modal-min-height, 420px);
-          max-height: var(--modal-max-height, 620px);
-          max-width: var(--modal-max-width, 840px);
-          display: flex;
-        }
-      </style>
-      <dialog part="modal">
-        <div part="content-wrapper" class="wrapper">
-          <slot></slot>
-        </div>
-      </dialog>
-    `;
+      }
+      
+      .wrapper {
+        border-radius: 0.375rem;
+        background-color: var(--modal-background-color, white);
+        width: var(--modal-width, 100%);
+        height: var(--modal-height, 100%);
+        min-width: var(--modal-min-width, 320px);
+        min-height: var(--modal-min-height, 420px);
+        max-height: var(--modal-max-height, 620px);
+        max-width: var(--modal-max-width, 840px);
+        display: flex;
+      }
+    </style>
+    <dialog part="modal">
+      <div part="content-wrapper" class="wrapper">
+        <slot></slot>
+      </div>
+    </dialog>
+  `;
 
 class Modal extends HTMLElement {
   #modal;

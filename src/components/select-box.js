@@ -4,18 +4,23 @@ selectBoxTemplate.innerHTML = `
       *{
         box-sizing: border-box;
       }
+      
       :host {
         position: relative;
       }
+      
       :host([open]) .trigger{
         border-color: var(--secondary) ;
       }
+      
       :host([open]) .items-wrapper {
         display: flex;
       }
+      
       :host([open]) .trigger-content{
        border-color: #1d1d1d;
       }
+      
       .trigger {
         background-color: transparent;
         border: transparent 1px solid;
@@ -25,6 +30,7 @@ selectBoxTemplate.innerHTML = `
         padding: 0.75rem;
         cursor: pointer;
       }
+      
       .trigger-content {
         display: flex;
         align-items: center;
@@ -32,12 +38,15 @@ selectBoxTemplate.innerHTML = `
         gap: 0.5rem;
         width: 100%;
         border-bottom: transparent 1px solid;
+        font-weight: bold;
       }
+      
       .trigger-content::after{
         content: url("data:image/svg+xml, %3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.6998 13.2484L16.2998 8.64844L17.3535 9.70219L11.6998 15.3559L6.04601 9.70219L7.09976 8.64844L11.6998 13.2484Z' fill='%231D1D1D'/%3E%3C/svg%3E");
         width: 24px;
         height: 24px;
       }
+      
       .items-wrapper {
         background-color: white;
         top: calc(100% - 0.75rem);
@@ -177,7 +186,7 @@ class SelectBox extends HTMLElement {
     if (!item) return;
 
     this.#updateSelectedItem(item);
-    this.#onChange?.();
+    this.#onChange?.(e);
     this.close();
   };
 

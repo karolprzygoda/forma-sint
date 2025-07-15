@@ -1,10 +1,9 @@
-import { fetchService } from "./fetch-service.js";
-
 class ProductsService {
   static #instance;
   #baseUrl = "https://brandstestowy.smallhost.pl/api/random";
-  #pageSize = 14;
   #productCache = new Map();
+  #featuredProductsLength = 10;
+  #currentPageSize = 0;
 
   constructor() {
     if (ProductsService.#instance) {
@@ -25,20 +24,16 @@ class ProductsService {
     return this.#baseUrl;
   }
 
-  get pageSize() {
-    return this.#pageSize;
+  get currentPageSize() {
+    return this.#currentPageSize;
+  }
+
+  get featuredProductsLength() {
+    return this.#featuredProductsLength;
   }
 
   get productCache() {
     return this.#productCache;
-  }
-
-  set pageSize(size) {
-    if (typeof size === "number" && size > 0) {
-      this.#pageSize = size;
-    } else {
-      console.warn("Page size must be a positive number");
-    }
   }
 
   #clearCache() {
@@ -55,20 +50,30 @@ class ProductsService {
     container.querySelectorAll("[data-product-skeleton]").forEach((item) => item.remove());
   };
 
-  async fetchProducts(pageNumber) {
-    const url = new URL(`?pageNumber=${pageNumber}&pageSize=${this.#pageSize}`, this.#baseUrl);
+  async fetchProducts(pageSize, options = {}) {
+    const page = pageSize + this.featuredProductsLength;
 
-    const response = await fetchService.fetch(url);
+    const url = new URL(`?pageNumber=1&pageSize=${page}`, this.#baseUrl);
 
-    if (!response || !response.data) {
+    const response = await fetch(url, options);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const { data } = await response.json();
+
+    if (!data) {
       throw new Error("Failed to fetch product data");
     }
 
-    response.data.forEach((item) => {
+    data.forEach((item) => {
       this.#productCache.set(item.id, item);
     });
 
-    return response.data;
+    this.#currentPageSize = page;
+
+    return data;
   }
 }
 

@@ -44,65 +44,90 @@ _This snippet shows how the custom select box is defined and registered, enablin
 
 Data fetching and parameter management are abstracted into services for maintainability and testability.
 
-**Example: reusable Fetch Service**
+**Example: Product Service**
 
 ```js
 // src/services/fetch-service.js
-class FetchService {
+class ProductsService {
     static #instance;
-    #cache;
+    #baseUrl = "https://brandstestowy.smallhost.pl/api/random";
+    #productCache = new Map();
+    #featuredProductsLength = 10;
+    #currentPageSize = 0;
 
     constructor() {
-        if (FetchService.#instance) {
-            return FetchService.#instance;
+        if (ProductsService.#instance) {
+            return ProductsService.#instance;
         }
-        FetchService.#instance = this;
-        this.#cache = new Map();
+
+        ProductsService.#instance = this;
     }
 
     static get instance() {
-        if (!FetchService.#instance) {
-            FetchService.#instance = new FetchService();
+        if (!ProductsService.#instance) {
+            ProductsService.#instance = new ProductsService();
         }
-        return FetchService.#instance;
+        return ProductsService.#instance;
     }
 
-    get cache() {
-        return this.#cache;
+    get baseUrl() {
+        return this.#baseUrl;
     }
 
-    clearCache() {
-        this.#cache = new Map();
+    get currentPageSize() {
+        return this.#currentPageSize;
     }
 
-    async fetch(url, options = {}) {
-        try {
-            const key = url + JSON.stringify(options);
-            const cached = this.#cache.get(key);
+    get featuredProductsLength() {
+        return this.#featuredProductsLength;
+    }
 
-            if (cached) {
-                return cached;
-            }
+    get productCache() {
+        return this.#productCache;
+    }
 
-            const response = await fetch(url, options);
+    #clearCache() {
+        this.#productCache.clear();
+    }
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+    appendSkeletons = (container, skeletonTemplate, number) => {
+        container.append(
+            ...Array.from({ length: number }).map(() => skeletonTemplate.content.cloneNode(true)),
+        );
+    };
 
-            const data = await response.json();
+    removeSkeletons = (container) => {
+        container.querySelectorAll("[data-product-skeleton]").forEach((item) => item.remove());
+    };
 
-            this.#cache.set(key, data);
+    async fetchProducts(pageSize, options = {}) {
+        const page = pageSize + this.featuredProductsLength;
 
-            return data;
-        } catch (error) {
-            console.error("Fetch error:", error);
-            throw error;
+        const url = new URL(`?pageNumber=1&pageSize=${page}`, this.#baseUrl);
+
+        const response = await fetch(url, options);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
+
+        const { data } = await response.json();
+
+        if (!data) {
+            throw new Error("Failed to fetch product data");
+        }
+
+        data.forEach((item) => {
+            this.#productCache.set(item.id, item);
+        });
+
+        this.#currentPageSize = page;
+
+        return data;
     }
 }
 
-export const fetchService = new FetchService();
+export const productsService = new ProductsService();
 
 ```
 
@@ -152,7 +177,6 @@ Achieved **100 points in every category on Google Lighthouse** (Performance, Acc
 ## 6. Areas for Improvement
 
 - **Toast Web Component:** The toast notification component is functional but not fully polished. Future work includes:
-  - Smoother animations
   - Improved accessibility (focus management, ARIA live regions)
   - More flexible API for triggering toasts
 - **Testing:** Increase coverage for edge cases and user interactions.

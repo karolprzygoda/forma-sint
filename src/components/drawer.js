@@ -2,8 +2,9 @@ const drawerTemplate = document.createElement("template");
 drawerTemplate.innerHTML = `
   <style>
     dialog[open] {
-      transform: none;
+      transform: translate(0,0);
     }
+    
     dialog {
       border: none;
       margin: 0;
@@ -11,75 +12,62 @@ drawerTemplate.innerHTML = `
       max-height: 100%;
       max-width: 100%;
       padding: 0;
-      inset-inline-start: unset;
-      transition:
-          transform var(--drawer-transition-duration, 0.3s) var(--drawer-timing-fucntion, ease-out),
-          opacity var(--drawer-transition-duration, 0.3s) var(--drawer-timing-fucntion, ease-out),
-          overlay var(--drawer-transition-duration, 0.3s) var(--drawer-timing-fucntion, ease-out) allow-discrete,
-          display var(--drawer-transition-duration, 0.3s) var(--drawer-timing-fucntion, ease-out) allow-discrete;
+      inset: unset;
+      transform: translate(var(--drawer-transform-x), var(--drawer-transform-y));
+      transition: all var(--drawer-transition-duration, 0.3s) var(--drawer-timing-fucntion, ease-out) allow-discrete;
     }
+    
     dialog[data-position="left"] {
       left: 0;
       top: 0;
       width: var(--drawer-width, 75%);
       height:var(--drawer-height, 100%);
+      --drawer-transform-y: 0;
+      --drawer-transform-x: -100%;
     }
+    
     dialog[data-position="right"] {
       right: 0;
       top: 0;
       width: var(--drawer-width, 75%);
       height:var(--drawer-height, 100%);
+      --drawer-transform-y: 0;
+      --drawer-transform-x: 100%;
     }
+    
     dialog[data-position="top"] {
       top: 0;
       left: 0;
       width: var(--drawer-width, 100%);
-      height: var(--drawer-height, 75%);
+      height: var(--drawer-height, 50%);
+      --drawer-transform-y: -100%;
+      --drawer-transform-x: 0;
     }
+    
     dialog[data-position="bottom"] {
       bottom: 0;
       left: 0;
       width: var(--drawer-width, 100%);
-      height: var(--drawer-height, 75%);
+      height: var(--drawer-height, 50%);
+      --drawer-transform-y: 100%;
+      --drawer-transform-x: 0;
     }
-    dialog[data-position="left"]:not([open]) {
-      transform: translateX(-100%);
-    }
-    dialog[data-position="right"]:not([open]) {
-      transform: translateX(100%);
-    }
-    dialog[data-position="top"]:not([open]) {
-      transform: translateY(-100%);
-    }
-    dialog[data-position="bottom"]:not([open]) {
-      transform: translateY(100%);
-    }
+   
     @starting-style {
-      dialog[data-position="left"][open] {  
-        transform: translateX(-100%);
-      }
-      dialog[data-position="right"][open] {  
-        transform: translateX(100%);
-      }
-      dialog[data-position="top"][open] {  
-        transform: translateY(-100%);
-      }
-      dialog[data-position="bottom"][open] {  
-        transform: translateY(100%);
+      dialog[open] {  
+        transform: translate(var(--drawer-transform-x), var(--drawer-transform-y));
       }
     }
+    
     dialog::backdrop {
       background-color: rgb(0 0 0 / 0%);
-      transition:
-        transform var(--drawer-transition-duration, 0.3s) var(--drawer-timing-fucntion, ease-out),
-        opacity var(--drawer-transition-duration, 0.3s) var(--drawer-timing-fucntion, ease-out),
-        overlay var(--drawer-transition-duration, 0.3s) var(--drawer-timing-fucntion, ease-out) allow-discrete,
-        display var(--drawer-transition-duration, 0.3s) var(--drawer-timing-fucntion, ease-out) allow-discrete,
-        background-color var(--drawer-transition-duration, 0.3s);
+      transition: all var(--drawer-transition-duration, 0.3s) var(--drawer-timing-fucntion, ease-out) allow-discrete;
     }
+    
     dialog[open]::backdrop {
       background-color: var(--drawer-backdrop,rgb(0 0 0 / 50%));
     }
+    
     @starting-style {
       dialog[open]::backdrop {
         background-color: rgb(0 0 0 / 0%);

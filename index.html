@@ -13,19 +13,33 @@
     />
     <meta name="author" content="Karol Przygoda" />
     <meta name="robots" content="index, follow" />
+    <!-- Open Graph meta tags   -->
+    <meta property="og:title" content="Forma'sint - Premium Outdoor Clothing & Gear" />
+    <meta
+      property="og:description"
+      content="Forma'sint - Premium outdoor clothing and gear. Discover our featured products including alpine climbing jackets and more."
+    />
+    <meta property="og:image" content="https://formasint.com/open-graph-img.png" />
+    <meta property="og:url" content="https://formasint.com" />
+    <meta property="og:type" content="website" />
+    <!-- Twitter Card Meta Tags  -->
+    <meta name="twitter:card" content="" />
+    <meta name="twitter:title" content="Forma'sint - Premium Outdoor Clothing & Gear" />
+    <meta
+      name="twitter:description"
+      content="Forma'sint - Premium outdoor clothing and gear. Discover our featured products including alpine climbing jackets and more."
+    />
+    <meta name="twitter:image" content="https://formasint.com/open-graph-img.png" />
+    <!-- Icon  -->
     <link rel="icon" type="image/svg+xml" href="/forma-icon.svg" />
+    <!-- Styles   -->
     <link rel="stylesheet" href="/src/styles/reset.css" />
     <link rel="stylesheet" href="/src/styles/global.css" />
     <link rel="stylesheet" href="/src/styles/top-bar.css" />
-    <link rel="stylesheet" href="/src/styles/hero.css" />
-    <link rel="stylesheet" href="/src/styles/featured.css" />
-    <link rel="stylesheet" href="/src/styles/product-card.css" />
-    <link rel="stylesheet" href="/src/styles/swiper.css" />
-    <link rel="stylesheet" href="/src/styles/favorite-button.css" />
+    <link rel="stylesheet" href="/src/styles/hero-section.css" />
+    <link rel="stylesheet" href="/src/styles/featured-section.css" />
     <link rel="stylesheet" href="/src/styles/drawer.css" />
-    <link rel="stylesheet" href="/src/styles/product-listing.css" />
-    <link rel="stylesheet" href="/src/styles/app-icon.css" />
-    <link rel="stylesheet" href="/src/styles/button.css" />
+    <link rel="stylesheet" href="/src/styles/listing-section.css" />
     <link rel="stylesheet" href="/src/styles/modal.css" />
     <script type="module" src="/src/main.js"></script>
     <title>Forma'sint - Premium Outdoor Clothing & Gear</title>
@@ -56,7 +70,7 @@
         />
       </symbol>
       <!-- Forma Icon -->
-      <symbol id="forma-icon" viewBox="0 0 24 24">
+      <symbol id="forma-icon">
         <path
           fill-rule="evenodd"
           clip-rule="evenodd"
@@ -263,7 +277,7 @@
               <span class="product-listing__pre-title">Forma’sint.</span>
               <span class="product-listing__title"> You'll look and feel like the champion. </span>
             </h2>
-            <a class="button--default" href="#">
+            <a class="product-listing__button" href="/">
               <span>Check This Out</span>
               <svg width="24" height="24" aria-label="Arrow right icon">
                 <use href="#chevron-right"></use>
@@ -328,10 +342,12 @@
             <span>CLOSE</span>
           </button>
           <div class="modal__badge"></div>
-          <img src="" alt="" />
+          <img src="" alt="" width="1024" height="1024" />
         </div>
       </div>
     </modal-panel>
+    <!--TOAST COMPONENT-->
+    <toast-popover></toast-popover>
     <!--PRODUCT CARD TEMPLATE-->
     <template id="product-card-template">
       <swiper-slide style="position: relative">
@@ -354,7 +370,7 @@
     </template>
     <!--PRODUCT LISTING ITEM TEMPLATE-->
     <template id="product-listing-item-template">
-      <a href="" class="product-listing__card" data-product aria-label="Product link">
+      <a href="" class="product-listing__card" data-product>
         <span class="product-listing__badge"></span>
         <img src="" alt="" />
       </a>
